@@ -2,6 +2,9 @@ import { Component,OnInit } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
+import { Firestore, collectionData, collection, addDoc, docData, doc } from '@angular/fire/firestore';
+import { ActivatedRoute } from '@angular/router';
+import { updateDoc } from '@firebase/firestore';
 
 @Component({
   selector: 'app-game',
@@ -9,16 +12,23 @@ import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  pickCardAnimation = false;
   game!: Game;
-  currentCard = '';
+  gameCollection;
+  gameId: string;
 
-  constructor(public dialog: MatDialog) {
-
+  constructor(private route: ActivatedRoute, public dialog: MatDialog, private firestore: Firestore) {
+    this.gameCollection = collection(this.firestore, 'games');
   }
 
   ngOnInit(): void {
     this.newGame();
+    this.route.params.subscribe((params: any) => {
+      this.gameId = params.id;
+      let selectedGame:any = doc(this.gameCollection, this.gameId)
+      this.firestore.collection('games').doc(this.gameId).valueChanges()
+
+      
+    })
   }
 
   newGame() {
@@ -26,18 +36,18 @@ export class GameComponent implements OnInit {
   }
 
   takeCard() {
-    if(!this.pickCardAnimation) {
-      this.currentCard = this.game.stack.pop()
-      this.pickCardAnimation = true;
-
+    if(!this.game.pickCardAnimation) {
+      this.game.currentCard = this.game.stack.pop()
+      this.game.pickCardAnimation = true;
       this.game.currentPlayer++
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
+      this.updateGame()
       setTimeout(() => {
-        this.pickCardAnimation = false;
-        this.game.playedCards.push(this.currentCard)
+        this.game.playedCards.push(this.game.currentCard)
+        this.game.pickCardAnimation = false;
+        this.updateGame()
       }, 1250)
     }
-    
   }
 
   openDialog(): void {
@@ -46,7 +56,14 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(name => {
       if(name && name.length > 0) {
         this.game.players.push(name)
+        this.updateGame()
       }
     });
+  }
+
+  updateGame() {
+   let currentGame = doc(this.gameCollection, this.gameId)
+   console.log(currentGame)
+   updateDoc(currentGame, this.game.toJson())
   }
 }

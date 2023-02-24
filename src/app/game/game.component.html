@@ -12,15 +12,15 @@
 
         <!-- Card stack -->
         <img *ngFor="let c of [0, 1, 2, 3]; let i = index;" [ngStyle]="{'right.px': i * 5}" 
-        src="/assets/img/cards/card_cover.png">
-        <img (click)="takeCard()" class="top-card" style="right: 25px;" src="/assets/img/cards/card_cover.png">
+        src="assets/img/cards/card_cover.png">
+        <img (click)="takeCard()" class="top-card" style="right: 25px;" src="assets/img/cards/card_cover.png">
 
         <!-- Stack for played cards -->
-        <img *ngFor="let card of this.game.playedCards" class="played-card card-stack" src="/assets/img/cards/{{ card }}.png">
+        <img *ngFor="let card of this.game.playedCards" class="played-card card-stack" src="assets/img/cards/{{ card }}.png">
 
         <!-- Current card (animation) -->
-        <img (click)="takeCard()" *ngIf="pickCardAnimation" class="pick-card" style="right: 25px;" 
-            src="/assets/img/cards/{{ currentCard }}.png">
+        <img (click)="takeCard()" *ngIf="game.pickCardAnimation" class="pick-card" style="right: 25px;" 
+            src="assets/img/cards/{{ game.currentCard }}.png">
     </div>
 </div>
 
@@ -28,4 +28,4 @@
     <mat-icon>add</mat-icon>
   </button>
 
-<app-game-info [card]="currentCard" class="pin-bottom"></app-game-info>
+<app-game-info [card]="game.currentCard" class="pin-bottom"></app-game-info>
