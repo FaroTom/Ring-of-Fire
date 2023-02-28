@@ -30,11 +30,26 @@
     transition: all 125ms ease-in-out;
     animation: pick-card-animation 1.25s ease-in-out;
     transform: scale(1.2) translateX(220px) translateY(-220px) rotate(-10deg);
+    @media (max-width: 1000px) {
+        animation: pick-card-animation-1000px 1.25s ease-in-out;
+    }
+    @media (max-width: 720px) {
+        animation: pick-card-animation-720px 1.25s ease-in-out;
+    }
+
 }
 
 .played-card {
     transform: scale(1.2) translateX(220px) translateY(-220px) rotate(-10deg);
     right: 25px;
+    
+    @media (max-width: 1000px) {
+        transform: scale(1.1) translateX(-90px) translateY(-235px) rotate(-13deg);
+    }
+
+    @media (max-width: 720px) {
+        transform: scale(1.1) translateX(160px) translateY(-220px) rotate(-10deg);
+    }
 }
 
 @keyframes pick-card-animation {
@@ -52,16 +67,106 @@
     }
 }
 
+@keyframes pick-card-animation-1000px {
+    0% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(1.6);
+    }
+    60% {
+        transform: scale(1.6);
+    }
+    100% {
+        transform: scale(1.1) translateX(-90px) translateY(-235px) rotate(-13deg);
+    }
+}
+
+@keyframes pick-card-animation-720px {
+    0% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(1.6);
+    }
+    60% {
+        transform: scale(1.6);
+    }
+    100% {
+        transform: scale(1.1) translateX(160px) translateY(-220px) rotate(-10deg);
+    }
+}
+
 .player-position {
-    position: absolute;
-    right: 0;
+    position: relative;
     z-index: 1;
+}
+
+.scroll-container-desktop {
+    position: absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    top: 32px;
+    right: 0;
+    gap: 20px;
+    width: 280px;
+    height: 580px;
+}
+
+.scroll-container-mobile {
+    position: absolute;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    width: 300px;
+    top: 0;
+    left: 0;
+    padding-left: 16px;
+    gap: 12px;
+    height: 100px;
+    @media (max-width: 460px) {
+        width: 232px;
+        padding-left: 8px;
+    }
 }
 
 .btn-add {
     position: absolute;
     bottom: 32px;
     right: 32px;
+    
+    @media (max-width: 720px) {
+        top: 16px;
+        right: 16px;
+    }
+
+    @media (max-width: 460px) {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+.btn-help {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    @media(max-width: 1000px) {
+        top: 16px;
+        left: 16px;
+        width: 44px;
+        height: 44px;
+    }
+    @media (max-width: 720px) {
+        top: 24px;
+        right: 90px;
+        left: unset;
+    }
+    @media (max-width: 460px) {
+        top: 16px;
+        right: 72px;
+    }
 }
 
 .pin-bottom {
@@ -69,4 +174,27 @@
     bottom: 32px;
     left: 100px;
     right: 100px;
+
+    @media (max-width: 720px) {
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+app-player,
+app-player-mobile {
+    cursor: pointer;
+    &:hover {
+        filter: brightness(1.2)
+    }
+}
+
+.game-over {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 400px;
+    }
 }
